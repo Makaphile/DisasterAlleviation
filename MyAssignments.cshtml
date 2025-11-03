@@ -1,0 +1,64 @@
+﻿@model List<DisasterAlleviationApp.Models.VolunteerAssignment>
+
+@{
+    ViewData["Title"] = "My Volunteer Assignments";
+}
+
+<h2>My Volunteer Assignments</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div class="row">
+    @foreach (var assignment in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">@assignment.Task.Title</h5>
+                    <span class="badge @GetStatusBadgeClass(assignment.Status)">@assignment.Status</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Task Description:</strong> @assignment.Task.Description</p>
+                    <p><strong>Location:</strong> @assignment.Task.Location</p>
+                    <p><strong>Date:</strong> @assignment.Task.StartDate.ToString("MMM dd, yyyy") - @assignment.Task.EndDate.ToString("MMM dd, yyyy")</p>
+                    <p><strong>Assigned On:</strong> @assignment.AssignmentDate.ToString("MMMM dd, yyyy")</p>
+                    
+                    @if (!string.IsNullOrEmpty(assignment.Notes))
+                    {
+                        <p><strong>Notes:</strong> @assignment.Notes</p>
+                    }
+                    
+                    @if (assignment.Task.DisasterIncident != null)
+                    {
+                        <p><strong>Disaster:</strong> @assignment.Task.DisasterIncident.Title</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>You don't have any volunteer assignments yet.</h4>
+        <p>Browse available tasks and sign up to help your community.</p>
+        <a href="@Url.Action("Tasks")" class="btn btn-primary">Browse Available Tasks</a>
+    </div>
+}
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "assigned" => "bg-info",
+            "completed" => "bg-success",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

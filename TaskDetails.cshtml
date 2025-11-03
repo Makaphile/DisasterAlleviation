@@ -1,0 +1,81 @@
+﻿@model DisasterAlleviationApp.Models.VolunteerTask
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>@Model.Title</h3>
+                <span class="badge @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>Location:</strong> @Model.Location
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Date Range:</strong> @Model.StartDate.ToString("MMMM dd, yyyy") - @Model.EndDate.ToString("MMMM dd, yyyy")
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <strong>Description:</strong>
+                    <p class="mt-2">@Model.Description</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>Required Skills:</strong>
+                        <p>@Model.RequiredSkills</p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Volunteer Capacity:</strong>
+                        <p>@Model.CurrentVolunteers / @Model.MaxVolunteers volunteers</p>
+                    </div>
+                </div>
+                
+                @if (Model.DisasterIncident != null)
+                {
+                    <div class="mb-4">
+                        <strong>Related Disaster:</strong>
+                        <p><a href="@Url.Action("Details", "Disaster", new { id = Model.DisasterIncident.Id })">@Model.DisasterIncident.Title</a></p>
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("Tasks")" class="btn btn-outline-secondary">Back to Tasks</a>
+                    
+                    @if (Model.CurrentVolunteers < Model.MaxVolunteers && Model.Status == "Open")
+                    {
+                        <form asp-action="AssignToTask" method="post">
+                            <input type="hidden" name="taskId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success">Volunteer for this Task</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>Task Full</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "open" => "bg-success",
+            "in progress" => "bg-warning",
+            "completed" => "bg-info",
+            "cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

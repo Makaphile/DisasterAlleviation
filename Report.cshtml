@@ -1,0 +1,89 @@
+﻿@model DisasterAlleviationApp.Models.DisasterIncident
+
+@{
+    ViewData["Title"] = "Report Disaster Incident";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Report Disaster Incident</h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Report" method="post">
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" placeholder="Brief title of the incident" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Detailed description of what happened"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Location" class="control-label"></label>
+                                <input asp-for="Location" class="form-control" placeholder="City, State, Area" />
+                                <span asp-validation-for="Location" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="DisasterType" class="control-label"></label>
+                                <select asp-for="DisasterType" class="form-control">
+                                    <option value="">Select Disaster Type</option>
+                                    <option value="Flood">Flood</option>
+                                    <option value="Earthquake">Earthquake</option>
+                                    <option value="Fire">Fire</option>
+                                    <option value="Hurricane">Hurricane</option>
+                                    <option value="Tornado">Tornado</option>
+                                    <option value="Landslide">Landslide</option>
+                                    <option value="Drought">Drought</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="DisasterType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IncidentDate" class="control-label"></label>
+                                <input asp-for="IncidentDate" type="date" class="form-control" />
+                                <span asp-validation-for="IncidentDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Severity" class="control-label"></label>
+                                <select asp-for="Severity" class="form-control">
+                                    <option value="">Select Severity</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Critical">Critical</option>
+                                </select>
+                                <span asp-validation-for="Severity" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Report</button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-block">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

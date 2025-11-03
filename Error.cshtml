@@ -1,0 +1,72 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-5">
+                    <i class="fas fa-exclamation-triangle fa-5x text-warning mb-4"></i>
+                    <h1 class="display-4 text-danger">Oops!</h1>
+                    <h2 class="mb-4">Something went wrong.</h2>
+
+                    @if (Model?.ShowRequestId ?? false)
+                    {
+                        <p class="mb-3">
+                            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+                        </p>
+                    }
+
+                    <p class="lead mb-4">
+                        We're sorry, but an error occurred while processing your request.
+                        Our team has been notified and we're working to fix the issue.
+                    </p>
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-home me-2"></i>Go Home
+                        </a>
+                        <a href="@Url.Action("Contact", "Home")" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-phone me-2"></i>Contact Support
+                        </a>
+                    </div>
+
+                    <div class="mt-5">
+                        <h5>What you can do:</h5>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <i class="fas fa-redo fa-2x text-primary mb-3"></i>
+                                        <h6>Refresh the Page</h6>
+                                        <p class="small">Try refreshing your browser</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <i class="fas fa-arrow-left fa-2x text-primary mb-3"></i>
+                                        <h6>Go Back</h6>
+                                        <p class="small">Return to the previous page</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <i class="fas fa-envelope fa-2x text-primary mb-3"></i>
+                                        <h6>Contact Us</h6>
+                                        <p class="small">Report this issue to our team</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+﻿@model List<DisasterAlleviationApp.Models.Donation>
+
+@{
+    ViewData["Title"] = "My Donations";
+}
+
+<h2>My Donations</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div class="row">
+    @foreach (var donation in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">@donation.DonationType Donation</h5>
+                    <span class="badge @GetStatusBadgeClass(donation.Status)">@donation.Status</span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Description:</strong> @donation.ItemDescription</p>
+                    
+                    @if (donation.MonetaryValue.HasValue)
+                    {
+                        <p><strong>Amount:</strong> R @donation.MonetaryValue.Value.ToString("N2")</p>
+                    }
+                    else
+                    {
+                        <p><strong>Quantity:</strong> @donation.Quantity</p>
+                    }
+                    
+                    @if (donation.DisasterIncident != null)
+                    {
+                        <p><strong>For Disaster:</strong> @donation.DisasterIncident.Title</p>
+                    }
+                    else
+                    {
+                        <p><strong>For:</strong> General Relief</p>
+                    }
+                    
+                    <p><strong>Donation Date:</strong> @donation.DonationDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>You haven't made any donations yet.</h4>
+        <p>Your donations can make a real difference in people's lives.</p>
+        <a href="@Url.Action("Donate")" class="btn btn-primary">Make Your First Donation</a>
+    </div>
+}
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "pending" => "bg-warning",
+            "received" => "bg-info",
+            "distributed" => "bg-success",
+            _ => "bg-secondary"
+        };
+    }
+}

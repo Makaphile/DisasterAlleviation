@@ -1,0 +1,80 @@
+﻿@model List<DisasterAlleviationApp.Models.DisasterIncident>
+
+@{
+    ViewData["Title"] = "Disaster Incidents";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Disaster Incidents</h2>
+    <a href="@Url.Action("Report")" class="btn btn-primary">Report New Incident</a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<div class="row">
+    @foreach (var incident in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">@incident.Title</h5>
+                    <span class="badge @GetSeverityBadgeClass(incident.Severity)">@incident.Severity</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@incident.Description</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Location:</strong> @incident.Location</li>
+                        <li><strong>Type:</strong> @incident.DisasterType</li>
+                        <li><strong>Reported:</strong> @incident.ReportedDate.ToString("MMMM dd, yyyy")</li>
+                        <li><strong>Status:</strong> 
+                            @if (incident.IsVerified)
+                            {
+                                <span class="badge bg-success">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Pending Verification</span>
+                            }
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Details", new { id = incident.Id })" class="btn btn-outline-primary btn-sm">View Details</a>
+                    <a href="@Url.Action("Donate", "Donation")" class="btn btn-outline-success btn-sm">Donate</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <h4>No disaster incidents reported yet.</h4>
+        <p>Be the first to report an incident and help your community.</p>
+        <a href="@Url.Action("Report")" class="btn btn-primary">Report Incident</a>
+    </div>
+}
+
+@functions {
+    public string GetSeverityBadgeClass(string severity)
+    {
+        return severity.ToLower() switch
+        {
+            "low" => "bg-success",
+            "medium" => "bg-warning",
+            "high" => "bg-orange",
+            "critical" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+<style>
+    .bg-orange {
+        background-color: #ff9800 !important;
+    }
+</style>

@@ -1,0 +1,80 @@
+﻿@model DisasterAlleviationApp.Models.DisasterIncident
+
+@{
+    ViewData["Title"] = "Incident Details";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>@Model.Title</h3>
+                <span class="badge @GetSeverityBadgeClass(Model.Severity)">@Model.Severity</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>Location:</strong> @Model.Location
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Disaster Type:</strong> @Model.DisasterType
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>Incident Date:</strong> @Model.IncidentDate.ToString("MMMM dd, yyyy")
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Reported Date:</strong> @Model.ReportedDate.ToString("MMMM dd, yyyy")
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <strong>Description:</strong>
+                    <p class="mt-2">@Model.Description</p>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Status:</strong>
+                        @if (Model.IsVerified)
+                        {
+                            <span class="badge bg-success">Verified</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Pending Verification</span>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Reported By:</strong> @Model.ReportedByUser.FirstName @Model.ReportedByUser.LastName
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Back to List</a>
+                    <div>
+                        <a href="@Url.Action("Donate", "Donation", new { disasterId = Model.Id })" class="btn btn-success">Donate to Help</a>
+                        <a href="@Url.Action("Tasks", "Volunteer")" class="btn btn-primary">Volunteer to Help</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetSeverityBadgeClass(string severity)
+    {
+        return severity.ToLower() switch
+        {
+            "low" => "bg-success",
+            "medium" => "bg-warning",
+            "high" => "bg-orange",
+            "critical" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
